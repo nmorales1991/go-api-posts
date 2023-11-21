@@ -14,6 +14,9 @@ func main() {
 	postHandler := handlers.NewPostHandler(postService)
 
 	r.GET("/posts", postHandler.GetPosts)
+	r.POST("/posts", postHandler.CreatePost)
+	r.GET("/post/:id", postHandler.GetPostById)
+	r.PUT("/post/:id", postHandler.UpdatePost)
 
 	err := r.Run()
 	if err != nil {
