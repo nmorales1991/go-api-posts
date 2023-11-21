@@ -17,6 +17,7 @@ func main() {
 	r.POST("/posts", postHandler.CreatePost)
 	r.GET("/post/:id", postHandler.GetPostById)
 	r.PUT("/post/:id", postHandler.UpdatePost)
+	r.POST("/comment/:id", postHandler.AddComment)
 
 	err := r.Run()
 	if err != nil {

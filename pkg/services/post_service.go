@@ -65,3 +65,20 @@ func (s *PostService) UpdatePost(id string, post models.Post) (models.Post, erro
 	newPost, _ = s.GetPostById(id)
 	return newPost, nil
 }
+
+func (s *PostService) AddComment(id string, comment models.PostComment) error {
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.D{{Key: "_id", Value: objectID}}
+	value := bson.D{
+		{Key: "$push", Value: bson.D{
+			{Key: "comments", Value: comment},
+		}},
+	}
+	_, err := s.collection.UpdateOne(context.Background(), filter, value)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -61,3 +61,18 @@ func (h *PostHandler) UpdatePost(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, newPost)
 }
+
+func (h *PostHandler) AddComment(c *gin.Context) {
+	id := c.Param("id")
+	var comment models.PostComment
+	if err := c.ShouldBindJSON(&comment); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err := h.PostService.AddComment(id, comment)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, comment)
+}
