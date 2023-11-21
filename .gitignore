@@ -1,0 +1,71 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# IDE/Editor folders
+.idea
+
+# Log files
+*.log
+
+# Golang build
+go.sum
+go.mod
+
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.s
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Large media files
+*.gif
+*.jpg
+*.jpeg
+*.png
+*.psd
+*.svg
+*.webp
+*.ai
+*.eps
+*.pdf
+*.pict
+*.tiff
+*.bmp
+*.ico
+*.heic
+*.raw
+
+# Other
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.env
