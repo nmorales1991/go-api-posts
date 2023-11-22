@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"go-api-posts/pkg/models"
 	"go-api-posts/pkg/repository"
 	"go.mongodb.org/mongo-driver/bson"
@@ -76,6 +77,25 @@ func (s *PostService) AddComment(id string, comment models.PostComment) error {
 	}
 	_, err := s.collection.UpdateOne(context.Background(), filter, value)
 
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *PostService) DeleteComment(id string, commentId int) error {
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.D{{Key: "_id", Value: objectID}}
+	value := bson.D{
+		{Key: "$pull", Value: bson.D{
+			{Key: "comments", Value: bson.D{
+				{Key: "id", Value: commentId},
+			}},
+		}},
+	}
+	result, err := s.collection.UpdateOne(context.Background(), filter, value)
+	fmt.Println(result.MatchedCount, result.ModifiedCount)
 	if err != nil {
 		return err
 	}

@@ -11,6 +11,10 @@ type PostHandler struct {
 	PostService *services.PostService
 }
 
+type Comment struct {
+	CommentId int `json:"commentId"`
+}
+
 func NewPostHandler(service *services.PostService) *PostHandler {
 	return &PostHandler{PostService: service}
 }
@@ -75,4 +79,19 @@ func (h *PostHandler) AddComment(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, comment)
+}
+
+func (h *PostHandler) DeleteComment(c *gin.Context) {
+	id := c.Param("id")
+	var comment Comment
+	if err := c.ShouldBindJSON(&comment); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err := h.PostService.DeleteComment(id, comment.CommentId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{})
 }

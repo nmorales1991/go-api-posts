@@ -18,6 +18,7 @@ func main() {
 	r.GET("/post/:id", postHandler.GetPostById)
 	r.PUT("/post/:id", postHandler.UpdatePost)
 	r.POST("/comment/:id", postHandler.AddComment)
+	r.DELETE("/comment/:id", postHandler.DeleteComment)
 
 	err := r.Run()
 	if err != nil {
