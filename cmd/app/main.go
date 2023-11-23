@@ -24,7 +24,6 @@ func main() {
 			"message": "pong",
 		})
 	})
-
 	err := r.Run()
 	if err != nil {
 		return
