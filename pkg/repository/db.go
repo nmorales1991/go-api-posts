@@ -9,7 +9,7 @@ import (
 )
 
 type DB struct {
-	Client *mongo.Client
+	client *mongo.Client
 }
 
 func NewDB() *DB {
@@ -23,9 +23,9 @@ func NewDB() *DB {
 	if err != nil {
 		panic(err)
 	}
-	return &DB{Client: client}
+	return &DB{client: client}
 }
 
 func (db *DB) GetCollection(databaseName string, collectionName string) *mongo.Collection {
-	return db.Client.Database(databaseName).Collection(collectionName)
+	return db.client.Database(databaseName).Collection(collectionName)
 }
