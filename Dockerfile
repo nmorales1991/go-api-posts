@@ -1,5 +1,5 @@
 # Start from the latest golang base image
-FROM golang:buster as builder
+FROM golang:buster
 
 # Add Maintainer Info
 LABEL maintainer="nmorales1991 <nmorales1991@example.com>"
@@ -16,19 +16,8 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . ./
 
-# change to app directory
-WORKDIR /app/cmd/app
-
 # Build the Go app
-RUN go build -o main .
-
-FROM debian:buster-slim
-RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
-
-COPY --from=builder /app/cmd/app/main /app/main
-
+RUN go build -o main cmd/app/main.go
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
