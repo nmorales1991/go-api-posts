@@ -2,7 +2,9 @@ package services
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"github.com/go-playground/validator/v10"
 	"go-api-posts/pkg/models"
 	"go-api-posts/pkg/repository"
 	"go.mongodb.org/mongo-driver/bson"
@@ -27,11 +29,22 @@ func (s *PostService) GetPosts() ([]models.Post, error) {
 	if err := cursor.All(context.Background(), &posts); err != nil {
 		return nil, err
 	}
+
 	return posts, nil
 }
 
 func (s *PostService) CreatePost(post models.Post) error {
-	_, err := s.collection.InsertOne(context.Background(), post)
+	if len(post.Comments) == 0 {
+		return errors.New("comments are required")
+	}
+
+	validate := validator.New()
+	err := validate.Struct(post)
+	if err != nil {
+		return err
+	}
+
+	_, err = s.collection.InsertOne(context.Background(), post)
 	if err != nil {
 		return err
 	}
@@ -84,7 +97,7 @@ func (s *PostService) AddComment(id string, comment models.PostComment) error {
 	return nil
 }
 
-func (s *PostService) DeleteComment(id string, commentId int) error {
+func (s *PostService) DeleteComment(id string, commentId string) error {
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{{Key: "_id", Value: objectID}}
 	value := bson.D{

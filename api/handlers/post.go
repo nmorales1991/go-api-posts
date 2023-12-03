@@ -12,7 +12,7 @@ type PostHandler struct {
 }
 
 type Comment struct {
-	CommentId int `json:"commentId"`
+	CommentId string `json:"commentId"`
 }
 
 func NewPostHandler(service *services.PostService) *PostHandler {
@@ -25,11 +25,17 @@ func (h *PostHandler) GetPosts(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	if len(posts) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "No posts found"})
+		return
+	}
+
 	c.JSON(http.StatusOK, posts)
 }
 
 func (h *PostHandler) CreatePost(c *gin.Context) {
-	var post models.Post
+	var post = models.NewPost()
 	if err := c.ShouldBindJSON(&post); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -68,7 +74,7 @@ func (h *PostHandler) UpdatePost(c *gin.Context) {
 
 func (h *PostHandler) AddComment(c *gin.Context) {
 	id := c.Param("id")
-	var comment models.PostComment
+	var comment = models.NewPostComment()
 	if err := c.ShouldBindJSON(&comment); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
