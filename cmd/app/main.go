@@ -21,7 +21,7 @@ func main() {
 	r.DELETE("/comment/:id", postHandler.DeleteComment)
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "funcionando en cloud run",
+			"message": "pong",
 		})
 	})
 	err := r.Run()
